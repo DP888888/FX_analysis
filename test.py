@@ -1,28 +1,52 @@
 import io
 
 import pandas as pd
+import datetime
 
 def changeDataFormate (TradeSignal):
     return TradeSignal
 
+def StrToDateTime(input):
+    # print (input)
+    str = input['SignalDate'] + ' ' + input['TIME']
+    dateFormatter = "%Y.%m.%d %H:%M:%S"
+    t = datetime.datetime.strptime(str, dateFormatter)
+    # print(t)
+    return t
 
-def FindPosGivenDateTime(priceDate, Date, time):
+
+def FindPosGivenDateTime(priceDate, SignalDate):
     # priceDate = pd.DataFrame.as_matrix (df_priceDate)
     # print (priceDate)
     print ('begin find !')
     # print (priceDate.loc[4])
     l = 1
     r = len (priceDate)
+    ans = -1
     while (l < r):
         mid = (l + r) // 2
-        print (mid, priceDate.loc [mid])
-        break
+        # print (mid, priceDate.loc [mid])
+        # str = priceDate.loc [mid]['SignalDate'] + ' ' + priceDate.loc [mid]['TIME']
+        # dateFormatter = "%Y.%m.%d %H:%M:%S"
+        # t = datetime.strptime(str, dateFormatter)
+        # print (t)
+
+        if SignalDate == StrToDateTime (priceDate.loc[mid]):
+            ans = mid
+            break
+        if SignalDate < StrToDateTime (priceDate.loc[mid]):
+            r = mid - 1
+        if SignalDate > StrToDateTime (priceDate.loc[mid]):
+            l = mid + 1
+
+    print ('finish find ', ans)
+    return ans
 
 
 class PriceRecord:
     def __init__(self, name):
         self.name = name
-        column = ['date', 'TIME', 'OPEN', 'HIGH', 'LOW', 'CLOSE', 'TICKVOL', 'VOL', 'SPREAD']
+        column = ['SignalDate', 'TIME', 'OPEN', 'HIGH', 'LOW', 'CLOSE', 'TICKVOL', 'VOL', 'SPREAD']
         file_name = 'data/' + name + '_M1.csv'
         # print(file_name)
         self.M1price = pd.read_csv (file_name, sep= '\t', names = column)
@@ -30,40 +54,21 @@ class PriceRecord:
     def printM1 (self):
         print (self.M1price)
 
-    def findDate (self, date):
-        # print (date)
+    def findDate (self, SignalDate):
         NewDate = ''
         num = 0
-        for index, each in enumerate (date):
-            if each == '/':
-                NewDate = NewDate + '.'
-                num = num + 1
-                if num == 2 and len (date) - index <= 2: #change 2020/10/1 to 2020.10.01
-                    NewDate = NewDate + '0'
-            else:
-                NewDate = NewDate + each
-        print (NewDate, 'begin find ..')
+        print (SignalDate, 'begin find ..')
+
+        dateFormatter = "%Y/%m/%d"
+        signalDate = datetime.datetime.strptime(SignalDate, dateFormatter)
+
+
         # print(self.M1price)
         find = 0
         out = []
-        # for index, row in self.M1price.iterrows ():
-        #     if (row['date'] == NewDate):
-        #         # print ('find !!!', index)
-        #         # print (row)
-        #         find = 1
-        #         out.append (index)
-        #         # break
-        #     else :
-        #         if find == 1:
-        #             break
-        BeginPos = FindPosGivenDateTime (self.M1price, NewDate, '00:00:00')
-        EndPos = FindPosGivenDateTime (self.M1price, NewDate, '01:00:00')
+
+        BeginPos = FindPosGivenDateTime (self.M1price, signalDate + datetime.timedelta(hours=9))
+        EndPos = FindPosGivenDateTime (self.M1price, signalDate + datetime.timedelta(hours=13))
         print ('finish ')
         # print (out)
         return out
-        # print (type (self.M1price))
-        # for each in self.M1price:
-        #     print (type (each))
-        #     break
-        #     # if each.date == NewDate:
-        #     #     print (each)

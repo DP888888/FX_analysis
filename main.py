@@ -16,14 +16,16 @@ def work (typeName):
     price = test.PriceRecord (typeName)
     price.printM1()
 
-    for i in range (1, 15):
+    for i in range (1, 5):
     # for i in range (1, len (TradeSignal)):
         # str =TradeSignal.loc[i]['type']
         # print (str)
         if TradeSignal.loc[i]['type'] == typeName:
             print (i)
             print(TradeSignal.loc[i])
-            price.findDate (TradeSignal.loc[i]['date'] )
+            print (price.M1price)
+            OutIndex = price.findDate (TradeSignal.loc[i]['date'] )
+            # print (price.M1price.iloc[OutIndex[0]])
 
 
 

@@ -40,6 +40,7 @@ def FindPosGivenDateTime(priceDate, SignalDate):
             l = mid + 1
 
     print ('finish find ', ans)
+    print (SignalDate, priceDate.loc[ans])
     return ans
 
 
@@ -54,7 +55,7 @@ class PriceRecord:
     def printM1 (self):
         print (self.M1price)
 
-    def findDate (self, SignalDate):
+    def findPriceGivenDate (self, SignalDate):
         NewDate = ''
         num = 0
         print (SignalDate, 'begin find ..')
@@ -70,5 +71,4 @@ class PriceRecord:
         BeginPos = FindPosGivenDateTime (self.M1price, signalDate + datetime.timedelta(hours=9))
         EndPos = FindPosGivenDateTime (self.M1price, signalDate + datetime.timedelta(hours=13))
         print ('finish ')
-        # print (out)
-        return out
+        return self.M1price[BeginPos: EndPos]

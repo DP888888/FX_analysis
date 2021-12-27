@@ -23,9 +23,8 @@ def work (typeName):
         if TradeSignal.loc[i]['type'] == typeName:
             print (i)
             print(TradeSignal.loc[i])
-            print (price.M1price)
-            OutIndex = price.findDate (TradeSignal.loc[i]['date'] )
-            # print (price.M1price.iloc[OutIndex[0]])
+            TodayPriceRecord = price.findPriceGivenDate (TradeSignal.loc[i]['date'] )
+            print (TodayPriceRecord)
 
 
 

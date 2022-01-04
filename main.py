@@ -74,13 +74,25 @@ def FindTraceFromPriceAndSignal(TodayPriceRecord, SignalArray, long):
     # print (SignalArray)
     return ret
 
+def MakeUnique (trace):
+    ret = []
+    st = set()
+    for each in trace:
+        if each not in st:
+            st.add (each)
+            ret.append (each)
+    return ret
+
 
 def work (typeName):
     price = test.PriceRecord (typeName)
     # price.printM1()
 
+    countUniqueTrace = {}
+    Count = 0
     for i in range (1, len (TradeSignal)):
         if TradeSignal.loc[i]['type'] == typeName :
+            Count = Count + 1
             print ('=========== ', i)
             TodayPriceRecord = price.findPriceGivenDate (TradeSignal.loc[i]['date'] )
             # print (TodayPriceRecord)
@@ -97,7 +109,18 @@ def work (typeName):
             # print (SignalArray)
             trace = FindTraceFromPriceAndSignal (TodayPriceRecord, SignalArray, TradeSignal.loc[i].direction == 'long')
             print (trace)
-            # break
+            UniqueTrace = tuple (MakeUnique (trace))
+            print ('======   ', UniqueTrace)
+            if UniqueTrace in countUniqueTrace.keys ():
+                countUniqueTrace[UniqueTrace] = countUniqueTrace[UniqueTrace] + 1
+            else:
+                countUniqueTrace[UniqueTrace] = 1
+    print (Count)
+    # print (countUniqueTrace)
+    for each in countUniqueTrace:
+        print (each, countUniqueTrace[each])
+
+
 
 
 

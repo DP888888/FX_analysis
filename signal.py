@@ -35,8 +35,12 @@ def SetSignalArray (TradeSignal, i):
 
     if TradeSignal.loc[i].direction == 'long':
         SignalArray[index] = float(TradeSignal.loc[i].cut) - 0.0010
+        index = index + 1
+        SignalArray[index] = float(TradeSignal.loc[i].cut) - 0.0020
     else:
         SignalArray[index] = float(TradeSignal.loc[i].cut) + 0.0010
+        index = index + 1
+        SignalArray[index] = float(TradeSignal.loc[i].cut) + 0.0020
     index = index + 1
 
     return SignalArray

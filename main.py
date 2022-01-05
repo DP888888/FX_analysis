@@ -81,7 +81,7 @@ def MakeUnique (trace):
     st = set()
     for each in trace:
         if each not in st:
-            # if each == 5: #when we meet cut line (3), clear all records and re-count the set
+            # if each >= 5: #when we meet cut line (3), clear all records and re-count the set
             #     st.clear ()
             st.add (each)
             ret.append (each)
@@ -113,18 +113,7 @@ def work (typeName):
             else:
                 countUniqueTrace[UniqueTrace] = 1
     print (Count)
-    # print (countUniqueTrace)
-    # countUniqueTrace = sorted(countUniqueTrace.items(), key=lambda kv: kv[1])
-    # print (countUniqueTrace)
-    # for each in countUniqueTrace:
-    #     print (each)
-    # for each in countUniqueTrace:
-    #     print (each, countUniqueTrace[each])
-    # OrderedDict(sorted(countUniqueTrace.items(), key=itemgetter(1)))
     countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[1]))
-    # sorted(countUniqueTrace.iteritems(), key=operator.itemgetter(1))
-    # print (countUniqueTrace)
-    # print ('====')
     for each in reversed (countUniqueTrace):
         print (each, countUniqueTrace[each])
 

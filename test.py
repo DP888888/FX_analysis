@@ -66,7 +66,7 @@ class PriceRecord:
         find = 0
         out = []
 
-        BeginPos = FindPosGivenDateTime (self.M1price, signalDate + datetime.timedelta(hours=9))
-        EndPos = FindPosGivenDateTime (self.M1price, signalDate + datetime.timedelta(hours=13))
+        BeginPos = FindPosGivenDateTime (self.M1price, signalDate + datetime.timedelta(hours=7))
+        EndPos = FindPosGivenDateTime (self.M1price, signalDate + datetime.timedelta(hours=11))
         # print ('finish ')
         return self.M1price[BeginPos: EndPos]

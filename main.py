@@ -1,4 +1,6 @@
 import test
+from collections import OrderedDict
+import operator
 import pandas as pd
 import signal
 
@@ -79,6 +81,8 @@ def MakeUnique (trace):
     st = set()
     for each in trace:
         if each not in st:
+            # if each == 5: #when we meet cut line (3), clear all records and re-count the set
+            #     st.clear ()
             st.add (each)
             ret.append (each)
     return ret
@@ -93,33 +97,36 @@ def work (typeName):
     for i in range (1, len (TradeSignal)):
         if TradeSignal.loc[i]['type'] == typeName :
             Count = Count + 1
-            print ('=========== ', i)
+            # print ('=========== ', i)
             TodayPriceRecord = price.findPriceGivenDate (TradeSignal.loc[i]['date'] )
             # print (TodayPriceRecord)
             # print(TradeSignal.loc[i])
-            SignalArray = {}
-            # print (TradeSignal.loc[i], TradeSignal.loc[i].Second)
-            if TradeSignal.loc[i].Second == '/':
-                SignalArray[0] = 1000000.0
-            else:
-                SignalArray[0] = float (TradeSignal.loc[i].Second)
-            SignalArray[1] = float (TradeSignal.loc[i].First)
-            SignalArray[2] = float (TradeSignal.loc[i].entry)
-            SignalArray[3] = float (TradeSignal.loc[i].cut)
+            SignalArray = signal.SetSignalArray(TradeSignal, i)
+
             # print (SignalArray)
             trace = FindTraceFromPriceAndSignal (TodayPriceRecord, SignalArray, TradeSignal.loc[i].direction == 'long')
-            print (trace)
+            # print (trace)
             UniqueTrace = tuple (MakeUnique (trace))
-            print ('======   ', UniqueTrace)
+            # print ('======   ', UniqueTrace)
             if UniqueTrace in countUniqueTrace.keys ():
                 countUniqueTrace[UniqueTrace] = countUniqueTrace[UniqueTrace] + 1
             else:
                 countUniqueTrace[UniqueTrace] = 1
     print (Count)
     # print (countUniqueTrace)
-    for each in countUniqueTrace:
+    # countUniqueTrace = sorted(countUniqueTrace.items(), key=lambda kv: kv[1])
+    # print (countUniqueTrace)
+    # for each in countUniqueTrace:
+    #     print (each)
+    # for each in countUniqueTrace:
+    #     print (each, countUniqueTrace[each])
+    # OrderedDict(sorted(countUniqueTrace.items(), key=itemgetter(1)))
+    countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[1]))
+    # sorted(countUniqueTrace.iteritems(), key=operator.itemgetter(1))
+    # print (countUniqueTrace)
+    # print ('====')
+    for each in reversed (countUniqueTrace):
         print (each, countUniqueTrace[each])
-
 
 
 

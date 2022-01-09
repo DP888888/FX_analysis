@@ -85,6 +85,8 @@ def MakeUnique (trace):
             #     st.clear ()
             st.add (each)
             ret.append (each)
+            if each == 0 or each >= 8:
+                return ret
     return ret
 
 
@@ -115,9 +117,10 @@ def work (typeName):
     print (Count)
     countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[1]))
     for each in reversed (countUniqueTrace):
-        print (each, countUniqueTrace[each])
+        print (each, ';',  countUniqueTrace[each])
 
 
 
 
 work ('EURUSD')
+# AA00AK12IB

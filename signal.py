@@ -60,6 +60,10 @@ def CountReachPosNum (countUniqueTrace, posIndex):
         print ('       ', each, countUniqueTrace[each])
 
 def AnalysisTrace (countUniqueTrace):
+    countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[0]))
+    for each in countUniqueTrace:
+        print(each, countUniqueTrace[each])
+    print (' ====================== ')
     countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[1]))
     for each in reversed(countUniqueTrace):
         print(each, countUniqueTrace[each])

@@ -1,4 +1,5 @@
 import pandas as pd
+from collections import OrderedDict
 
 def changeDataFormate (TradeSignal):
     TradeSignal = TradeSignal.drop(labels=0)
@@ -44,3 +45,24 @@ def SetSignalArray (TradeSignal, i):
     index = index + 1
 
     return SignalArray
+
+def CountReachPosNum (countUniqueTrace, posIndex):
+    count = 0
+    ret = []
+    for each in countUniqueTrace:
+        for eachPos in each:
+            if posIndex == eachPos:
+                count = count + countUniqueTrace[each]
+                ret.append (each)
+                break
+    print ('The number of traces ever reach position ', posIndex, '  : ', count)
+    for each in ret:
+        print ('       ', each, countUniqueTrace[each])
+
+def AnalysisTrace (countUniqueTrace):
+    countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[1]))
+    for each in reversed(countUniqueTrace):
+        print(each, countUniqueTrace[each])
+
+    CountReachPosNum (countUniqueTrace, 0)
+    CountReachPosNum(countUniqueTrace, 7) # cut - 10

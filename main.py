@@ -56,6 +56,9 @@ def FindPos (CandleRecord, SignalArray, long):
                 if Between (Values[i], CandleRecord):
                     ret.append(Keys[i])
                     # return Keys[i]
+    for i in range (len (ret)):
+        if (ret[i] == 0):
+            return ret[0:i + 1]
     return ret
 
 
@@ -112,10 +115,9 @@ def work (typeName):
                 countUniqueTrace[UniqueTrace] = countUniqueTrace[UniqueTrace] + 1
             else:
                 countUniqueTrace[UniqueTrace] = 1
-    print (Count)
-    countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[1]))
-    for each in reversed (countUniqueTrace):
-        print (each, countUniqueTrace[each])
+    print ('Total count: ', Count)
+    signal.AnalysisTrace(countUniqueTrace)
+
 
 
 

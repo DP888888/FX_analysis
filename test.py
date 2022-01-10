@@ -49,6 +49,7 @@ class PriceRecord:
         file_name = 'data/' + name + '_M1.csv'
         # print(file_name)
         self.M1price = pd.read_csv (file_name, sep= '\t', names = column)
+        self.FullTraceOfEachDate = {}
         self.countUniqueTrace = {}
         self.IndexSetOfEachTrace = {} #record the index in TradeSignal of each trace
 

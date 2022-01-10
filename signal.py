@@ -46,7 +46,7 @@ def SetSignalArray (TradeSignal, i):
 
     return SignalArray
 
-def CountReachPosNum (countUniqueTrace, posIndex, TradeSignal, IndexSetOfEachTrace):
+def CountReachPosNum (countUniqueTrace, posIndex, TradeSignal, IndexSetOfEachTrace, test):
     count = 0
     ret = []
     for each in countUniqueTrace:
@@ -60,7 +60,10 @@ def CountReachPosNum (countUniqueTrace, posIndex, TradeSignal, IndexSetOfEachTra
         print ('       ', each, countUniqueTrace[each])
         print ('            ', IndexSetOfEachTrace[each])
         cur = IndexSetOfEachTrace[each][0]
-        print ('     ========= ', cur, TradeSignal['date'].values[cur])
+        date = TradeSignal['date'].values[cur]
+        print ('     ========= ', cur, date)
+        print ('               ', test.FullTraceOfEachDate[date])
+        print ()
 
 def IncDict (dict, List, curCount):
     if List in dict.keys ():
@@ -81,7 +84,7 @@ def AnalyseBeginPos (countUniqueTrace, TotCount):
     for each in begin:
         print (each, begin[each], '                ', Percentage(begin[each], TotCount))
 
-def AnalysisTrace (countUniqueTrace, TotCount, TradeSignal, IndexSetOfEachTrace):
+def AnalysisTrace (countUniqueTrace, TotCount, TradeSignal, IndexSetOfEachTrace, test):
     countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[0]))
     for each in countUniqueTrace:
         print(each, countUniqueTrace[each])
@@ -96,5 +99,5 @@ def AnalysisTrace (countUniqueTrace, TotCount, TradeSignal, IndexSetOfEachTrace)
 
     AnalyseBeginPos (countUniqueTrace, TotCount)
 
-    CountReachPosNum (countUniqueTrace, 0, TradeSignal, IndexSetOfEachTrace)
-    CountReachPosNum(countUniqueTrace, 7, TradeSignal, IndexSetOfEachTrace) # cut - 10
+    CountReachPosNum (countUniqueTrace, 0, TradeSignal, IndexSetOfEachTrace, test)
+    CountReachPosNum(countUniqueTrace, 7, TradeSignal, IndexSetOfEachTrace, test) # cut - 10

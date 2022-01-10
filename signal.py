@@ -5,6 +5,13 @@ def changeDataFormate (TradeSignal):
     TradeSignal = TradeSignal.drop(labels=0)
     return TradeSignal
 
+
+def IncDict (dict, List, curCount):
+    if List in dict.keys ():
+        dict[List] = dict[List] + curCount
+    else:
+        dict[List] = curCount
+
 def SetSignalArray (TradeSignal, i):
     SignalArray = {}
     index = 0
@@ -54,18 +61,73 @@ def RemoveContinousEqual (trace):
     return  ret
 
 
-def MakeUniqueForMidPosOpenPosition (trace):
+def MakeUniqueForMidPosOpenPosition (trace, AddPositionIndex):
     ret = []
     st = set()
     midPosReach = 0
     for each in trace:
         if each not in st:
-            if each == 5 and midPosReach == 0:
+            if each == AddPositionIndex and midPosReach == 0:
                 midPosReach = 1
                 st.clear ()
             st.add (each)
             ret.append (each)
     return ret
+
+def analyseMidPosAddPosition (ret, IndexSetOfEachTrace, TradeSignal, test):
+    index = []
+    trace = []
+    highPosRecord = {}
+    for each in ret:
+        for i in range(len(IndexSetOfEachTrace[each])):
+            cur = IndexSetOfEachTrace[each][i]
+            # date = TradeSignal['date'].values[cur] #this is wrong !!
+            date = TradeSignal.loc[cur]['date']
+            # print ('     ========= ', cur, date)
+            FullTrace = MakeUniqueForMidPosOpenPosition(test.FullTraceOfEachDate[date], 5)
+            AddIndex = FullTrace.index (5)
+
+            if (len (FullTrace) > AddIndex + 1):
+                HighPos = min (FullTrace[AddIndex+1:])
+            else:
+                HighPos = 5
+            IncDict(highPosRecord, HighPos, 1)
+
+            # print('                ******    ', FullTrace, AddIndex)
+            # if len (FullTrace) <= AddIndex + 1 or FullTrace[AddIndex + 1] != 6:
+            #     #for this case, only add position in mid pos, not in cut, we analyse them
+            #     index.append (i)
+            #     trace.append (FullTrace)
+    print (highPosRecord)
+    print()
+
+def analyseCutPosAddPosition (ret, IndexSetOfEachTrace, TradeSignal, test):
+    index = []
+    trace = []
+    highPosRecord = {}
+    for each in ret:
+        for i in range(len(IndexSetOfEachTrace[each])):
+            cur = IndexSetOfEachTrace[each][i]
+            # date = TradeSignal['date'].values[cur] #this is wrong !!
+            date = TradeSignal.loc[cur]['date']
+            # print ('     ========= ', cur, date)
+            FullTrace = MakeUniqueForMidPosOpenPosition(test.FullTraceOfEachDate[date], 6)
+            AddIndex = FullTrace.index (6)
+
+            if (len (FullTrace) > AddIndex + 1):
+                HighPos = min (FullTrace[AddIndex+1:])
+                # print (HighPos, FullTrace, FullTrace[AddIndex + 1:])
+            else:
+                HighPos = 6
+            IncDict(highPosRecord, HighPos, 1)
+
+            # print('                ******    ', FullTrace, AddIndex)
+            # if len (FullTrace) <= AddIndex + 1 or FullTrace[AddIndex + 1] != 6:
+            #     #for this case, only add position in mid pos, not in cut, we analyse them
+            #     index.append (i)
+            #     trace.append (FullTrace)
+    print (highPosRecord)
+    print()
 
 def CountReachPosNum (countUniqueTrace, posIndex, TradeSignal, IndexSetOfEachTrace, test):
     count = 0
@@ -81,21 +143,11 @@ def CountReachPosNum (countUniqueTrace, posIndex, TradeSignal, IndexSetOfEachTra
     for each in ret:
         print ('       ', each, countUniqueTrace[each])
 
-        if posIndex == 5:
-            # print ('            ', IndexSetOfEachTrace[each])
-            for i in range (len (IndexSetOfEachTrace[each])):
-                cur = IndexSetOfEachTrace[each][i]
-                # date = TradeSignal['date'].values[cur] #this is wrong !!
-                date = TradeSignal.loc[cur]['date']
-                # print ('     ========= ', cur, date)
-                print ('                ******    ', MakeUniqueForMidPosOpenPosition(test.FullTraceOfEachDate[date]))
-        print ()
+    if posIndex == 5:
+        analyseMidPosAddPosition(ret, IndexSetOfEachTrace, TradeSignal, test)
+    if posIndex == 6:
+        analyseCutPosAddPosition(ret, IndexSetOfEachTrace, TradeSignal, test)
 
-def IncDict (dict, List, curCount):
-    if List in dict.keys ():
-        dict[List] = dict[List] + curCount
-    else:
-        dict[List] = curCount
 
 def Percentage (a, b):
     return str ( round (a / b * 100.0, 3)) + '%'

@@ -52,6 +52,7 @@ class PriceRecord:
         self.FullTraceOfEachDate = {}
         self.countUniqueTrace = {}
         self.IndexSetOfEachTrace = {} #record the index in TradeSignal of each trace
+        self.TotalSignalNum = 0
 
     def printM1 (self):
         print (self.M1price)

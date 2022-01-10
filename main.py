@@ -98,6 +98,7 @@ def work (typeName):
     test.countUniqueTrace = {}
     test.IndexSetOfEachTrace = {} #record the index in TradeSignal of each trace
     Count = 0
+    test.TotalSignalNum = 0
     # for i in range (81, 82):
     for i in range (1, len (TradeSignal)):
         if TradeSignal.loc[i]['type'] == typeName :
@@ -107,7 +108,7 @@ def work (typeName):
 
             trace = FindTraceFromPriceAndSignal (TodayPriceRecord, SignalArray, TradeSignal.loc[i].direction == 'long')
             UniqueTrace = tuple (MakeUnique (trace))
-            print (i, TradeSignal.loc[i]['date'], trace, UniqueTrace)
+            # print (i, TradeSignal.loc[i]['date'], trace, UniqueTrace)
             signal.IncDict(test.countUniqueTrace, UniqueTrace, 1)
             if tuple (UniqueTrace) in test.IndexSetOfEachTrace.keys ():
                 test.IndexSetOfEachTrace[UniqueTrace].append (i)
@@ -115,11 +116,11 @@ def work (typeName):
                 test.IndexSetOfEachTrace[UniqueTrace] = [i]
 
             date = TradeSignal.loc[i]['date']
-            print ( '  === ', i, date)
             test.FullTraceOfEachDate [date] = trace
 
 
     print ('Total count: ', Count)
+    test.TotalSignalNum = Count
     signal.AnalysisTrace(test.countUniqueTrace, Count, TradeSignal, test.IndexSetOfEachTrace, test)
 
 

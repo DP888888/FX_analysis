@@ -55,18 +55,18 @@ def CountReachPosNum (countUniqueTrace, posIndex, TradeSignal, IndexSetOfEachTra
                 count = count + countUniqueTrace[each]
                 ret.append (each)
                 break
-    print ('The number of traces ever reach position ', posIndex, '  : ', count)
+    print ('The number of traces ever reach position ', posIndex, '  : ', count, Percentage(count, test.TotalSignalNum))
+
     for each in ret:
         print ('       ', each, countUniqueTrace[each])
-        print ('            ', IndexSetOfEachTrace[each])
-        cur = IndexSetOfEachTrace[each][0]
-        # date = TradeSignal['date'].values[cur] #this is wrong !!
-        date = TradeSignal.loc[cur]['date']
-        # print ('  %%%  ', cur, date, date1)
-        # print ('     ========= ', cur, date, TradeSignal.loc[cur][date])
-        print ('     ========= ', cur, date)
-        print ('               ', test.FullTraceOfEachDate[date])
-        print ()
+
+        # print ('            ', IndexSetOfEachTrace[each])
+        # cur = IndexSetOfEachTrace[each][0]
+        # # date = TradeSignal['date'].values[cur] #this is wrong !!
+        # date = TradeSignal.loc[cur]['date']
+        # print ('     ========= ', cur, date)
+        # print ('               ', test.FullTraceOfEachDate[date])
+        # print ()
 
 def IncDict (dict, List, curCount):
     if List in dict.keys ():
@@ -100,7 +100,11 @@ def AnalysisTrace (countUniqueTrace, TotCount, TradeSignal, IndexSetOfEachTrace,
     for each in reversed(countUniqueTrace):
         print(each, countUniqueTrace[each])
 
+    countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[0]))
     AnalyseBeginPos (countUniqueTrace, TotCount)
 
     CountReachPosNum (countUniqueTrace, 0, TradeSignal, IndexSetOfEachTrace, test)
+    CountReachPosNum(countUniqueTrace, 5, TradeSignal, IndexSetOfEachTrace, test) # cut - 10
+    CountReachPosNum(countUniqueTrace, 6, TradeSignal, IndexSetOfEachTrace, test) # cut - 10
     CountReachPosNum(countUniqueTrace, 7, TradeSignal, IndexSetOfEachTrace, test) # cut - 10
+    CountReachPosNum(countUniqueTrace, 8, TradeSignal, IndexSetOfEachTrace, test) # cut - 20

@@ -60,7 +60,10 @@ def CountReachPosNum (countUniqueTrace, posIndex, TradeSignal, IndexSetOfEachTra
         print ('       ', each, countUniqueTrace[each])
         print ('            ', IndexSetOfEachTrace[each])
         cur = IndexSetOfEachTrace[each][0]
-        date = TradeSignal['date'].values[cur]
+        # date = TradeSignal['date'].values[cur] #this is wrong !!
+        date = TradeSignal.loc[cur]['date']
+        # print ('  %%%  ', cur, date, date1)
+        # print ('     ========= ', cur, date, TradeSignal.loc[cur][date])
         print ('     ========= ', cur, date)
         print ('               ', test.FullTraceOfEachDate[date])
         print ()

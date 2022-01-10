@@ -28,15 +28,15 @@ def FindPos (CandleRecord, SignalArray, long):
     if long:
         if CandleRecord.OPEN <= CandleRecord.CLOSE:
             #up candle
-            # find the highest match position, find from high to low
-            for i in range(len(Values)):
+            # find the lowest match position, find from low to high
+            for i in range(len(Values) - 1, 0, -1):
                 if Between (Values[i], CandleRecord):
                     ret.append(Keys[i])
                     # return Keys[i]
         else:
             # down candle
-            # find the lowest match position, find from low to high
-            for i in range(len(Values) - 1, 0, -1):
+            # find the highest match position, find from high to low
+            for i in range(len(Values)):
                 if Between (Values[i], CandleRecord):
                     ret.append(Keys[i])
                     # return Keys[i]
@@ -44,15 +44,13 @@ def FindPos (CandleRecord, SignalArray, long):
         # short
         if CandleRecord.OPEN <= CandleRecord.CLOSE:
             #up candle
-            # find the highest match position, find from high to low
-            for i in range(len(Values) - 1, 0, -1):
+            for i in range(len(Values)):
                 if Between (Values[i], CandleRecord):
                     ret.append(Keys[i])
                     # return Keys[i]
         else:
             # down candle
-            # find the lowest match position, find from low to high
-            for i in range(len(Values)):
+            for i in range(len(Values) - 1, 0, -1):
                 if Between (Values[i], CandleRecord):
                     ret.append(Keys[i])
                     # return Keys[i]
@@ -71,7 +69,8 @@ def FindTraceFromPriceAndSignal(TodayPriceRecord, SignalArray, long):
     ret = []
     for index, row in TodayPriceRecord.iterrows():
         nextPos = FindPos(row, SignalArray, long)
-        # print( '====   ', nextPos)
+        # if (len (nextPos) > 0):
+        #     print( '====   ', nextPos)
         ret = ret + nextPos
         # if nextPos != -1 and nextPos != curPos:
         #     curPos = nextPos
@@ -99,6 +98,7 @@ def work (typeName):
     test.countUniqueTrace = {}
     test.IndexSetOfEachTrace = {} #record the index in TradeSignal of each trace
     Count = 0
+    # for i in range (81, 82):
     for i in range (1, len (TradeSignal)):
         if TradeSignal.loc[i]['type'] == typeName :
             Count = Count + 1
@@ -107,7 +107,7 @@ def work (typeName):
 
             trace = FindTraceFromPriceAndSignal (TodayPriceRecord, SignalArray, TradeSignal.loc[i].direction == 'long')
             UniqueTrace = tuple (MakeUnique (trace))
-            print ( TradeSignal.loc[i]['date'], trace, UniqueTrace)
+            print (i, TradeSignal.loc[i]['date'], trace, UniqueTrace)
             signal.IncDict(test.countUniqueTrace, UniqueTrace, 1)
             if tuple (UniqueTrace) in test.IndexSetOfEachTrace.keys ():
                 test.IndexSetOfEachTrace[UniqueTrace].append (i)
@@ -115,6 +115,7 @@ def work (typeName):
                 test.IndexSetOfEachTrace[UniqueTrace] = [i]
 
             date = TradeSignal.loc[i]['date']
+            print ( '  === ', i, date)
             test.FullTraceOfEachDate [date] = trace
 
 

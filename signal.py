@@ -46,6 +46,27 @@ def SetSignalArray (TradeSignal, i):
 
     return SignalArray
 
+def RemoveContinousEqual (trace):
+    ret = []
+    for i in range (len (trace)):
+        if i == 0 or trace[i] != trace[i - 1]:
+            ret.append (trace[i])
+    return  ret
+
+
+def MakeUniqueForMidPosOpenPosition (trace):
+    ret = []
+    st = set()
+    midPosReach = 0
+    for each in trace:
+        if each not in st:
+            if each == 5 and midPosReach == 0:
+                midPosReach = 1
+                st.clear ()
+            st.add (each)
+            ret.append (each)
+    return ret
+
 def CountReachPosNum (countUniqueTrace, posIndex, TradeSignal, IndexSetOfEachTrace, test):
     count = 0
     ret = []
@@ -60,13 +81,15 @@ def CountReachPosNum (countUniqueTrace, posIndex, TradeSignal, IndexSetOfEachTra
     for each in ret:
         print ('       ', each, countUniqueTrace[each])
 
-        # print ('            ', IndexSetOfEachTrace[each])
-        # cur = IndexSetOfEachTrace[each][0]
-        # # date = TradeSignal['date'].values[cur] #this is wrong !!
-        # date = TradeSignal.loc[cur]['date']
-        # print ('     ========= ', cur, date)
-        # print ('               ', test.FullTraceOfEachDate[date])
-        # print ()
+        if posIndex == 5:
+            # print ('            ', IndexSetOfEachTrace[each])
+            for i in range (len (IndexSetOfEachTrace[each])):
+                cur = IndexSetOfEachTrace[each][i]
+                # date = TradeSignal['date'].values[cur] #this is wrong !!
+                date = TradeSignal.loc[cur]['date']
+                # print ('     ========= ', cur, date)
+                print ('                ******    ', MakeUniqueForMidPosOpenPosition(test.FullTraceOfEachDate[date]))
+        print ()
 
 def IncDict (dict, List, curCount):
     if List in dict.keys ():
@@ -104,7 +127,7 @@ def AnalysisTrace (countUniqueTrace, TotCount, TradeSignal, IndexSetOfEachTrace,
     AnalyseBeginPos (countUniqueTrace, TotCount)
 
     CountReachPosNum (countUniqueTrace, 0, TradeSignal, IndexSetOfEachTrace, test)
-    CountReachPosNum(countUniqueTrace, 5, TradeSignal, IndexSetOfEachTrace, test) # cut - 10
-    CountReachPosNum(countUniqueTrace, 6, TradeSignal, IndexSetOfEachTrace, test) # cut - 10
+    CountReachPosNum(countUniqueTrace, 5, TradeSignal, IndexSetOfEachTrace, test)
+    CountReachPosNum(countUniqueTrace, 6, TradeSignal, IndexSetOfEachTrace, test)
     CountReachPosNum(countUniqueTrace, 7, TradeSignal, IndexSetOfEachTrace, test) # cut - 10
     CountReachPosNum(countUniqueTrace, 8, TradeSignal, IndexSetOfEachTrace, test) # cut - 20

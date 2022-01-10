@@ -127,4 +127,6 @@ def work (typeName):
 
 
 
-work ('EURUSD')
+# work ('EURUSD')
+# work ('GBPUSD')
+work ('GBPJPY')

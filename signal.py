@@ -140,8 +140,8 @@ def CountReachPosNum (countUniqueTrace, posIndex, TradeSignal, IndexSetOfEachTra
                 break
     print ('The number of traces ever reach position ', posIndex, '  : ', count, Percentage(count, test.TotalSignalNum))
 
-    for each in ret:
-        print ('       ', each, countUniqueTrace[each])
+    # for each in ret:
+    #     print ('       ', each, countUniqueTrace[each])
 
     if posIndex == 5:
         analyseMidPosAddPosition(ret, IndexSetOfEachTrace, TradeSignal, test)

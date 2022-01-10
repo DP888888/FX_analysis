@@ -63,7 +63,10 @@ def IncDict (dict, List, curCount):
     if List in dict.keys ():
         dict[List] = dict[List] + curCount
     else:
-        dict[List] = 1
+        dict[List] = curCount
+
+def Percentage (a, b):
+    return str ( round (a / b * 100.0, 3)) + '%'
 
 def AnalyseBeginPos (countUniqueTrace, TotCount):
     begin = {}
@@ -73,7 +76,7 @@ def AnalyseBeginPos (countUniqueTrace, TotCount):
     begin = OrderedDict (sorted(begin.items(), key = lambda x: x[0]))
     print ('Count the beginning of each trace')
     for each in begin:
-        print (each, begin[each], '                ',  str ( round (begin[each] / TotCount * 100.0, 3)) + '%')
+        print (each, begin[each], '                ', Percentage(begin[each], TotCount))
 
 def AnalysisTrace (countUniqueTrace, TotCount):
     countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[0]))

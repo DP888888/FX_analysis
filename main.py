@@ -111,10 +111,11 @@ def work (typeName):
             # print (trace)
             UniqueTrace = tuple (MakeUnique (trace))
             # print ('======   ', UniqueTrace)
-            if UniqueTrace in countUniqueTrace.keys ():
-                countUniqueTrace[UniqueTrace] = countUniqueTrace[UniqueTrace] + 1
-            else:
-                countUniqueTrace[UniqueTrace] = 1
+            signal.IncDict(countUniqueTrace, UniqueTrace, 1)
+            # if UniqueTrace in countUniqueTrace.keys ():
+            #     countUniqueTrace[UniqueTrace] = countUniqueTrace[UniqueTrace] + 1
+            # else:
+            #     countUniqueTrace[UniqueTrace] = 1
     print ('Total count: ', Count)
     signal.AnalysisTrace(countUniqueTrace, Count)
 

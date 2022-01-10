@@ -59,7 +59,23 @@ def CountReachPosNum (countUniqueTrace, posIndex):
     for each in ret:
         print ('       ', each, countUniqueTrace[each])
 
-def AnalysisTrace (countUniqueTrace):
+def IncDict (dict, List, curCount):
+    if List in dict.keys ():
+        dict[List] = dict[List] + curCount
+    else:
+        dict[List] = 1
+
+def AnalyseBeginPos (countUniqueTrace, TotCount):
+    begin = {}
+    for each in countUniqueTrace:
+        IncDict (begin, each[0:1], countUniqueTrace[each])
+        IncDict (begin, each[0:2], countUniqueTrace[each])
+    begin = OrderedDict (sorted(begin.items(), key = lambda x: x[0]))
+    print ('Count the beginning of each trace')
+    for each in begin:
+        print (each, begin[each], '                ',  str ( round (begin[each] / TotCount * 100.0, 3)) + '%')
+
+def AnalysisTrace (countUniqueTrace, TotCount):
     countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[0]))
     for each in countUniqueTrace:
         print(each, countUniqueTrace[each])
@@ -67,6 +83,8 @@ def AnalysisTrace (countUniqueTrace):
     countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[1]))
     for each in reversed(countUniqueTrace):
         print(each, countUniqueTrace[each])
+
+    AnalyseBeginPos (countUniqueTrace, TotCount)
 
     CountReachPosNum (countUniqueTrace, 0)
     CountReachPosNum(countUniqueTrace, 7) # cut - 10

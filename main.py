@@ -116,7 +116,7 @@ def work (typeName):
             else:
                 countUniqueTrace[UniqueTrace] = 1
     print ('Total count: ', Count)
-    signal.AnalysisTrace(countUniqueTrace)
+    signal.AnalysisTrace(countUniqueTrace, Count)
 
 
 

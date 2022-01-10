@@ -95,8 +95,8 @@ def work (typeName):
     price = test.PriceRecord (typeName)
     # price.printM1()
 
-    countUniqueTrace = {}
-    IndexSetOfEachTrace = {} #record the index in TradeSignal of each trace
+    test.countUniqueTrace = {}
+    test.IndexSetOfEachTrace = {} #record the index in TradeSignal of each trace
     Count = 0
     for i in range (1, len (TradeSignal)):
         if TradeSignal.loc[i]['type'] == typeName :
@@ -112,18 +112,18 @@ def work (typeName):
             # print (trace)
             UniqueTrace = tuple (MakeUnique (trace))
             # print ('======   ', UniqueTrace)
-            signal.IncDict(countUniqueTrace, UniqueTrace, 1)
-            if tuple (UniqueTrace) in IndexSetOfEachTrace.keys ():
-                IndexSetOfEachTrace[UniqueTrace].append (i)
+            signal.IncDict(test.countUniqueTrace, UniqueTrace, 1)
+            if tuple (UniqueTrace) in test.IndexSetOfEachTrace.keys ():
+                test.IndexSetOfEachTrace[UniqueTrace].append (i)
             else:
-                IndexSetOfEachTrace[UniqueTrace] = [i]
-            # if UniqueTrace in countUniqueTrace.keys ():
-            #     countUniqueTrace[UniqueTrace] = countUniqueTrace[UniqueTrace] + 1
+                test.IndexSetOfEachTrace[UniqueTrace] = [i]
+            # if UniqueTrace in test.countUniqueTrace.keys ():
+            #     test.countUniqueTrace[UniqueTrace] = test.countUniqueTrace[UniqueTrace] + 1
             # else:
-            #     countUniqueTrace[UniqueTrace] = 1
+            #     test.countUniqueTrace[UniqueTrace] = 1
     print ('Total count: ', Count)
-    # print (IndexSetOfEachTrace)
-    signal.AnalysisTrace(countUniqueTrace, Count, TradeSignal, IndexSetOfEachTrace)
+    # print (test.IndexSetOfEachTrace)
+    signal.AnalysisTrace(test.countUniqueTrace, Count, TradeSignal, test.IndexSetOfEachTrace)
 
 
 

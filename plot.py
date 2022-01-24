@@ -8,20 +8,18 @@ import matplotlib.dates as mdates
 
 def work (typeName):
     price = test.PriceRecord (typeName)
-    df = price.plotGivenDate('2020.10.01', 60)
-    print (df)
+    df = price.plotGivenDate('2020.10.01', '2020.10.04', 60)
 
     df['DATE'] = df['DATE'] + ' ' + df['TIME']
 
     df = df[['DATE', 'OPEN', 'HIGH', 'LOW', 'CLOSE']]
-    print(df)
     df['DATE'] = pd.to_datetime(df['DATE'])
     df['HIGH'] = df['HIGH'].astype(float)
     df['LOW'] = df['LOW'].astype(float)
     df['CLOSE'] = df['CLOSE'].astype(float)
     df['OPEN'] = df['OPEN'].astype(float)
 
-    print('=== ', df)
+    print(df)
 
     df['DATE'] = df['DATE'].apply(mdates.date2num)
     fig, ax = plt.subplots()
@@ -30,8 +28,8 @@ def work (typeName):
     # candlestick_ohlc(ax, df.values, width=0.015, colorup='green', colordown='red')
     candlestick_ohlc(ax, df.values, width=0.015, colorup='green', colordown='red', alpha=0.8)
     ax.xaxis_date()
-    ax.xaxis.set_major_locator(ticker.MultipleLocator(0.5))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%y-%m-%d %H:%M:%S'))
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%y-%m-%d %H:%M'))
     if typeName == 'GBPJPY':
         ax.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
     else:
@@ -40,8 +38,7 @@ def work (typeName):
     plt.grid()
     # plt.xticks(rotation=45)
     plt.show()
-    # return df
 
 
-# df = work ('EURUSD')
-df = work ('GBPJPY')
+df = work ('EURUSD')
+# df = work ('GBPJPY')

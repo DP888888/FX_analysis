@@ -14,6 +14,20 @@ def StrToDateTime(input):
     # print(t)
     return t
 
+def StrToDayTime(str):
+    dateFormatter = "%Y.%m.%d"
+    t = datetime.datetime.strptime(str, dateFormatter)
+    # print(t)
+    return t
+
+def CheckDateBetween(date, BeginDate, EncDate):
+    input = StrToDayTime(date)
+    begin = StrToDayTime(BeginDate)
+    end = StrToDayTime(EncDate)
+    return input >= begin and input <= end
+
+
+
 
 def FindPosGivenDateTime(priceDate, DATE):
     # priceDate = pd.DataFrame.as_matrix (df_priceDate)
@@ -85,13 +99,16 @@ class PriceRecord:
                 ret[4] = each[4]
         return  ret
 
-    def plotGivenDate (self, date, MinutePerBar = 1):
+    def plotGivenDate (self, BeginDate, EncDate, MinutePerBar = 1):
         find = 0
         l = -1
         r = -1
         ret = []
         for index, row in self.M1price.iterrows():
-            if row['DATE'] == date:
+            if index == 0:
+                continue
+            if CheckDateBetween (row['DATE'], BeginDate, EncDate):
+            # if row['DATE'] == date:
                 if l == -1:
                     l = index
                     find = 1

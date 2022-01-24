@@ -8,7 +8,7 @@ import matplotlib.dates as mdates
 
 def work (typeName):
     price = test.PriceRecord (typeName)
-    df = price.plotGivenDate('2020.10.01', '2020.10.04', 60)
+    df = price.plotGivenDate('2020.10.01', '2020.10.14', 60)
 
     df['DATE'] = df['DATE'] + ' ' + df['TIME']
 
@@ -23,20 +23,24 @@ def work (typeName):
 
     df['DATE'] = df['DATE'].apply(mdates.date2num)
     fig, ax = plt.subplots()
+    dpi = 300
+    fig.set_dpi(dpi)
 
     # plotting the data
     # candlestick_ohlc(ax, df.values, width=0.015, colorup='green', colordown='red')
     candlestick_ohlc(ax, df.values, width=0.015, colorup='green', colordown='red', alpha=0.8)
     ax.xaxis_date()
     ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%y-%m-%d %H:%M'))
+    # ax.xaxis.set_major_formatter(mdates.DateFormatter('%y-%m-%d %H:%M'))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
     if typeName == 'GBPJPY':
         ax.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
     else:
         ax.yaxis.set_major_formatter(FormatStrFormatter('%.4f'))
 
     plt.grid()
-    # plt.xticks(rotation=45)
+    plt.xticks(rotation=45)
+    # fig.set_size_inches(1920 / dpi, 1980 / dpi)
     plt.show()
 
 

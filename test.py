@@ -75,21 +75,34 @@ class PriceRecord:
         # print ('finish ')
         return self.M1price[BeginPos: EndPos]
 
-    def plotGivenDate (self, date):
+    def SumArrayToOneBar (self, input):
+        ret = input[0]
+        ret[5] = input[-1][5] #close
+        for each in input:
+            if float (each[3]) > float (ret[3]): #high
+                ret[3] = each[3]
+            if float (each[4]) < float (ret[4]): #low
+                ret[4] = each[4]
+        return  ret
+
+    def plotGivenDate (self, date, MinutePerBar = 1):
         find = 0
         l = -1
+        r = -1
+        ret = []
         for index, row in self.M1price.iterrows():
-            if (row['DATE'] == date):
+            if row['DATE'] == date:
                 if l == -1:
                     l = index
-                # print(row['TIME'], row['OPEN'])
-                find = 1
+                    find = 1
             else:
                 if find == 1:
                     r = index
                     break
-        print('finish', l, r)
-        # df = self.M1price.iloc[l:r, 1: ]
-        df = self.M1price.iloc[1000:1441, : ]
-        # print (df)
-        return df
+        tmp = []
+        for i in range (l, r):
+            if len (tmp) == MinutePerBar or i == r - 1:
+                ret.append (self.SumArrayToOneBar (tmp))
+                tmp.clear()
+            tmp.append (self.M1price.loc[i])
+        return pd.DataFrame (ret)

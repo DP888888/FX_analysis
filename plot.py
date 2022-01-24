@@ -1,4 +1,5 @@
 import test
+import matplotlib.ticker as ticker
 import pandas as pd
 import matplotlib.pyplot as plt
 from mplfinance.original_flavor import candlestick_ohlc
@@ -26,7 +27,7 @@ def work (typeName):
     price = test.PriceRecord (typeName)
     # price.printM1()
     # print ('===')
-    df = price.plotGivenDate('2020.10.01')
+    df = price.plotGivenDate('2020.10.01', 60)
     print (df)
     return df
     # ax = plot_c(df)
@@ -50,11 +51,13 @@ df['DATE'] = df['DATE'].apply (mdates.date2num)
 fig, ax = plt.subplots()
 
 # plotting the data
-# candlestick_ohlc(ax, df.values, width=0.6, colorup='green', colordown='red', alpha=0.8)
-candlestick_ohlc(ax, df.values, width=0.00015, colorup='green', colordown='red')
+# candlestick_ohlc(ax, df.values, width=0.015, colorup='green', colordown='red')
+candlestick_ohlc(ax, df.values, width=0.015, colorup='green', colordown='red', alpha = 0.8)
 ax.xaxis_date()
-# ax.xaxis.set_major_formatter(mdates.DateFormatter('%y-%m-%d %H:%M:%S'))
+ax.xaxis.set_major_locator(ticker.MultipleLocator(0.5))
+ax.xaxis.set_major_formatter(mdates.DateFormatter('%y-%m-%d %H:%M:%S'))
 
+plt.grid ()
 plt.xticks(rotation=45)
 plt.show ()
 

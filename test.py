@@ -90,6 +90,6 @@ class PriceRecord:
                     break
         print('finish', l, r)
         # df = self.M1price.iloc[l:r, 1: ]
-        df = self.M1price.iloc[1439:1441, : ]
+        df = self.M1price.iloc[1000:1441, : ]
         # print (df)
         return df

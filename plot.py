@@ -11,7 +11,7 @@ import matplotlib.dates as mdates
 
 def work (typeName):
     price = test.PriceRecord (typeName)
-    df = price.plotGivenDate('2020.10.01', '2020.10.14', 60)
+    df = price.plotGivenDate('2020.10.13', '2020.10.13', 1)
 
     df['DATE'] = df['DATE'] + ' ' + df['TIME']
 
@@ -21,19 +21,14 @@ def work (typeName):
     df['LOW'] = df['LOW'].astype(float)
     df['CLOSE'] = df['CLOSE'].astype(float)
     df['OPEN'] = df['OPEN'].astype(float)
+    # df['DATE'] = df['DATE'].apply(mdates.date2num)
 
-    print(df)
-    print (' ===')
     date_tickers = df.DATE.values
-    # print (df.values)
     weekday_quotes = [tuple([i] + list(quote[1:])) for i, quote in enumerate(df.values)]
-    # print (weekday_quotes)
-    print (date_tickers)
 
+    for i in range (len (weekday_quotes)):
+        print (i, date_tickers[i],  '      ====   ',  weekday_quotes[i])
 
-    # exit()
-
-    df['DATE'] = df['DATE'].apply(mdates.date2num)
     fig, ax = plt.subplots()
     dpi = 300
     fig.set_dpi(dpi)
@@ -48,13 +43,13 @@ def work (typeName):
         t = t[l + 1:r]
         pp = t.find ('T')
         t = t[:pp] + ' ' + t[pp + 1: ]
-        print (t)
+        # print (t)
         return t
 
 
     # plotting the data
     # candlestick_ohlc(ax, df.values, width=0.015, colorup='green', colordown='red')
-    ax.xaxis.set_major_locator(ticker.MultipleLocator(160))
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(180))
     ax.xaxis.set_major_formatter(ticker.FuncFormatter(format_date))
 
     candlestick_ohlc(ax, weekday_quotes, width=0.015, colorup='green', colordown='red', alpha=0.8)
@@ -70,8 +65,8 @@ def work (typeName):
         ax.yaxis.set_major_formatter(FormatStrFormatter('%.4f'))
 
     plt.grid()
-    # plt.xticks(rotation=45)
-    # fig.set_size_inches(1920 / dpi, 1980 / dpi)
+    plt.xticks(rotation=45)
+    fig.set_size_inches(1920 / dpi, 1980 / dpi)
     plt.show()
 
 

@@ -9,9 +9,10 @@ import signal
 # exit()
 
 column = ['date', 'week', 'type', 'direction', 'entry', 'cut', 'First', 'Second']
-TradeSignal = pd.read_csv('data/TradeSignal(1).csv', names = column)
+TradeSignal = pd.read_csv('data/TradeSignal(4).csv', names = column)
 TradeSignal = signal.changeDataFormate (TradeSignal)
-# print( TradeSignal)
+print( TradeSignal)
+exit ()
 
 def Between (strCurPrice, CandleRecord):
     CurPrice = float ( strCurPrice)
@@ -128,5 +129,5 @@ def work (typeName):
 
 
 # work ('EURUSD')
-# work ('GBPUSD')
-work ('GBPJPY')
+work ('GBPUSD')
+# work ('GBPJPY')

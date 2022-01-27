@@ -11,6 +11,8 @@ import matplotlib.dates as mdates
 
 def work (typeName):
     price = test.PriceRecord (typeName)
+    price.CheckData()
+    exit()
     df = price.plotGivenDate('2020.10.13', '2020.10.13', 1)
 
     df['DATE'] = df['DATE'] + ' ' + df['TIME']

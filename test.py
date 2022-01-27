@@ -99,6 +99,21 @@ class PriceRecord:
                 ret[4] = each[4]
         return  ret
 
+    def CheckData (self):
+        count = -1
+        last = self.M1price.loc[1]['DATE']
+        for index, each in self.M1price.iterrows():
+            if index == 0:
+                continue
+            if each['DATE'] != last:
+                if count != 1440:
+                    print (last, count-1440)
+                last = each['DATE']
+                count = 1
+            else:
+                count = count + 1
+        print(last, count - 1440)
+
     def plotGivenDate (self, BeginDate, EncDate, MinutePerBar = 1):
         find = 0
         l = -1

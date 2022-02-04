@@ -1,4 +1,7 @@
+#!/usr/bin/env python
 import test
+import platform
+import os, sys
 from matplotlib.ticker import FormatStrFormatter
 import matplotlib.ticker as ticker
 from datetime import datetime
@@ -11,9 +14,11 @@ import matplotlib.dates as mdates
 
 def work (typeName):
     price = test.PriceRecord (typeName)
-    price.CheckData()
-    exit()
-    df = price.plotGivenDate('2020.10.13', '2020.10.13', 1)
+    # price.printM1()
+    # # exit()
+    # price.CheckData()
+    # exit()
+    df = price.plotGivenDate('2020.03.24', '2020.03.24', 60)
 
     df['DATE'] = df['DATE'] + ' ' + df['TIME']
 
@@ -51,10 +56,10 @@ def work (typeName):
 
     # plotting the data
     # candlestick_ohlc(ax, df.values, width=0.015, colorup='green', colordown='red')
-    ax.xaxis.set_major_locator(ticker.MultipleLocator(180))
+    # ax.xaxis.set_major_locator(ticker.MultipleLocator(10))
     ax.xaxis.set_major_formatter(ticker.FuncFormatter(format_date))
 
-    candlestick_ohlc(ax, weekday_quotes, width=0.015, colorup='green', colordown='red', alpha=0.8)
+    candlestick_ohlc(ax, weekday_quotes, width=0.015 * 30, colorup='green', colordown='red', alpha=0.8)
 
 
     # ax.xaxis_date()
@@ -67,8 +72,10 @@ def work (typeName):
         ax.yaxis.set_major_formatter(FormatStrFormatter('%.4f'))
 
     plt.grid()
-    plt.xticks(rotation=45)
+    # plt.xticks(rotation=45)
     fig.set_size_inches(1920 / dpi, 1980 / dpi)
+    plt.axhline(1.0805)
+    plt.axvline(5.5)
     plt.show()
 
 

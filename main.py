@@ -1,5 +1,6 @@
 import test
 from collections import OrderedDict
+import numpy
 import operator
 import pandas as pd
 import signal
@@ -9,10 +10,17 @@ import signal
 # exit()
 
 column = ['date', 'week', 'type', 'direction', 'entry', 'cut', 'First', 'Second']
-TradeSignal = pd.read_csv('data/TradeSignal(4).csv', names = column)
+TradeSignal = pd.read_csv('data/TradeSignal(2).csv', names = column)
 TradeSignal = signal.changeDataFormate (TradeSignal)
-print( TradeSignal)
-exit ()
+TradeSignal['direction'] = TradeSignal['direction'].astype (str)
+for index, each in TradeSignal.iterrows ():
+    if float (each['entry']) < float (each['cut']):
+        dir = 'short'
+    else:
+        dir = 'long'
+    TradeSignal.at[index, 'direction'] = dir
+# print (TradeSignal)
+# exit ()
 
 def Between (strCurPrice, CandleRecord):
     CurPrice = float ( strCurPrice)
@@ -105,6 +113,8 @@ def work (typeName):
         if TradeSignal.loc[i]['type'] == typeName :
             Count = Count + 1
             TodayPriceRecord = price.findPriceGivenDate (TradeSignal.loc[i]['date'] )
+            if TodayPriceRecord.size == 0:
+                continue
             SignalArray = signal.SetSignalArray(TradeSignal, i)
 
             trace = FindTraceFromPriceAndSignal (TodayPriceRecord, SignalArray, TradeSignal.loc[i].direction == 'long')
@@ -128,6 +138,6 @@ def work (typeName):
 
 
 
-# work ('EURUSD')
-work ('GBPUSD')
+work ('EURUSD')
+# work ('GBPUSD')
 # work ('GBPJPY')

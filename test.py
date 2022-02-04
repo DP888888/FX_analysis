@@ -35,8 +35,15 @@ def FindPosGivenDateTime(priceDate, DATE):
     # print (priceDate)
     # print ('begin find !', DATE)
     # print (priceDate.loc[4])
-    l = 1
-    r = len (priceDate)
+    l = 0
+    r = len (priceDate)-1
+
+    aaa = StrToDateTime (priceDate.loc[l])
+    abb = StrToDateTime (priceDate.loc[r])
+
+    if DATE < StrToDateTime (priceDate.loc[l]) or  DATE > StrToDateTime (priceDate.loc[r]):
+        return -1
+
     ans = -1
     while (l <= r):
         mid = (l + r) // 2
@@ -59,14 +66,19 @@ def FindPosGivenDateTime(priceDate, DATE):
 class PriceRecord:
     def __init__(self, name):
         self.name = name
-        column = ['DATE', 'TIME', 'OPEN', 'HIGH', 'LOW', 'CLOSE', 'TICKVOL', 'VOL', 'SPREAD']
-        file_name = 'data/' + name + '_M1.csv'
+        # column = ['DATE', 'TIME', 'OPEN', 'HIGH', 'LOW', 'CLOSE', 'TICKVOL', 'VOL', 'SPREAD']
+        column = ['DATE', 'TIME', 'OPEN', 'HIGH', 'LOW', 'CLOSE', 'TICKVOL']
+        # file_name = 'data/small_' + name + '_M1.csv'
+        file_name = 'data/new_' + name + '_M1.csv'
         # print(file_name)
-        self.M1price = pd.read_csv (file_name, sep= '\t', names = column)
+        self.M1price = pd.read_csv (file_name, sep= ',', names = column)
         self.FullTraceOfEachDate = {}
         self.countUniqueTrace = {}
         self.IndexSetOfEachTrace = {} #record the index in TradeSignal of each trace
         self.TotalSignalNum = 0
+
+    def changeTimeFromUTCtoMT4 (self):
+        print (self.M1price)
 
     def printM1 (self):
         print (self.M1price)
@@ -87,6 +99,9 @@ class PriceRecord:
         BeginPos = FindPosGivenDateTime (self.M1price, DATE + datetime.timedelta(hours=7))
         EndPos = FindPosGivenDateTime (self.M1price, DATE + datetime.timedelta(hours=11))
         # print ('finish ')
+        if BeginPos == -1 or EndPos == -1:
+            return pd.DataFrame()
+            # retrun -1
         return self.M1price[BeginPos: EndPos]
 
     def SumArrayToOneBar (self, input):
@@ -103,11 +118,13 @@ class PriceRecord:
         count = -1
         last = self.M1price.loc[1]['DATE']
         for index, each in self.M1price.iterrows():
+            # print (index, each)
             if index == 0:
                 continue
             if each['DATE'] != last:
-                if count != 1440:
-                    print (last, count-1440)
+                # if count != 1440:
+                #     print (last, count-1440)
+                print(last, count - 1440)
                 last = each['DATE']
                 count = 1
             else:

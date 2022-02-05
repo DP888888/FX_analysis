@@ -2,6 +2,7 @@ import io
 
 import pandas as pd
 import datetime
+from pytz import timezone
 
 def changeDataFormate (TradeSignal):
     return TradeSignal
@@ -64,6 +65,17 @@ def FindPosGivenDateTime(priceDate, DATE):
 
 
 class PriceRecord:
+    def changeTimeFromUTCtoMT4 (self):
+        tz_chicago = timezone('America/Chicago')
+        # print (self.M1price)
+        for index, row in self.M1price.iterrows ():
+            now = StrToDateTime(self.M1price.loc[index])
+            after = now + datetime.timedelta(hours=9)
+            # print (self.M1price.loc [index], now, after)
+            # p = now.replace(tzinfo=datetime.timezone.utc).astimezone(tz=None)
+            p = now.replace(tzinfo=datetime.timezone.utc).astimezone(tz_chicago) + datetime.timedelta(hours=8)
+            print (now, p)
+
     def __init__(self, name):
         self.name = name
         # column = ['DATE', 'TIME', 'OPEN', 'HIGH', 'LOW', 'CLOSE', 'TICKVOL', 'VOL', 'SPREAD']
@@ -76,9 +88,8 @@ class PriceRecord:
         self.countUniqueTrace = {}
         self.IndexSetOfEachTrace = {} #record the index in TradeSignal of each trace
         self.TotalSignalNum = 0
+        self.changeTimeFromUTCtoMT4 ()
 
-    def changeTimeFromUTCtoMT4 (self):
-        print (self.M1price)
 
     def printM1 (self):
         print (self.M1price)

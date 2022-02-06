@@ -155,7 +155,7 @@ class PriceRecord:
                 count = count + 1
         print(last, count - 1440)
 
-    def plotGivenDate (self, BeginDate, EncDate, MinutePerBar = 1):
+    def plotGivenDate (self, BeginDate, EndDate, MinutePerBar = 1):
         find = 0
         l = -1
         r = -1
@@ -163,7 +163,7 @@ class PriceRecord:
         # for index, row in self.M1price.iterrows():
         #     if index == 0:
         #         continue
-        #     if CheckDateBetween (row['DATE'], BeginDate, EncDate):
+        #     if CheckDateBetween (row['DATE'], BeginDate, EndDate):
         #         if l == -1:
         #             l = index
         #             find = 1
@@ -174,7 +174,12 @@ class PriceRecord:
 
         l = FindPosGivenDateTime (self.M1price, StrToDayTime(BeginDate))
         r = FindPosGivenDateTime (self.M1price, StrToDateTime(BeginDate + ' 23:59:00'))
-        # r = FindPosGivenDateTime (self.M1price, StrToDayTime(EncDate))
+
+        while l - 1 >= 1 and CheckDateBetween(self.M1price.loc[l - 1]['DATE'], BeginDate, EndDate):
+            l = l - 1
+        Max = len (self.M1price)
+        while r + 1 < Max and CheckDateBetween(self.M1price.loc[r + 1]['DATE'], BeginDate, EndDate):
+            r = r + 1
 
         tmp = []
         for i in range (l, r):

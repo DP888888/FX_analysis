@@ -66,6 +66,8 @@ def FindPosGivenDateTime(priceDate, DATE):
 
 class PriceRecord:
     def changeTimeFromUTCtoMT4 (self):
+        print (self.M1price)
+        print (' ==== ')
         tz_chicago = timezone('America/Chicago')
         # print (self.M1price)
         for index, row in self.M1price.iterrows ():
@@ -74,14 +76,18 @@ class PriceRecord:
             # print (self.M1price.loc [index], now, after)
             # p = now.replace(tzinfo=datetime.timezone.utc).astimezone(tz=None)
             p = now.replace(tzinfo=datetime.timezone.utc).astimezone(tz_chicago) + datetime.timedelta(hours=8)
-            print (now, p)
+            print (now, p, '   ==== ', p.date(), p.time ())
+            self.M1price.loc[index, 'DATE'] = str (p.date()).replace ('-', '.')
+            self.M1price.loc[index, 'TIME'] = str (p.time())
+
+        print (self.M1price)
 
     def __init__(self, name):
         self.name = name
         # column = ['DATE', 'TIME', 'OPEN', 'HIGH', 'LOW', 'CLOSE', 'TICKVOL', 'VOL', 'SPREAD']
         column = ['DATE', 'TIME', 'OPEN', 'HIGH', 'LOW', 'CLOSE', 'TICKVOL']
-        # file_name = 'data/small_' + name + '_M1.csv'
-        file_name = 'data/new_' + name + '_M1.csv'
+        file_name = 'data/small_' + name + '_M1.csv'
+        # file_name = 'data/new_' + name + '_M1.csv'
         # print(file_name)
         self.M1price = pd.read_csv (file_name, sep= ',', names = column)
         self.FullTraceOfEachDate = {}

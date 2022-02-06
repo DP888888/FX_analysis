@@ -11,7 +11,6 @@ def DtRowToDateTime(input):
     str = input['DATE'] + ' ' + input['TIME']
     dateFormatter = "%Y.%m.%d %H:%M:%S"
     t = datetime.datetime.strptime(str, dateFormatter)
-    # print(t)
     return t
 
 def StrToDateTime(input):
@@ -22,7 +21,6 @@ def StrToDateTime(input):
 def StrToDayTime(str):
     dateFormatter = "%Y.%m.%d"
     t = datetime.datetime.strptime(str, dateFormatter)
-    # print(t)
     return t
 
 def CheckDateBetween(date, BeginDate, EncDate):
@@ -44,7 +42,6 @@ def FindPosGivenDateTime(priceDate, DATE):
     ans = -1
     while (l <= r):
         mid = (l + r) // 2
-        # print (priceDate.loc[mid])
 
         if DATE == DtRowToDateTime (priceDate.loc[mid]):
             ans = mid
@@ -54,18 +51,13 @@ def FindPosGivenDateTime(priceDate, DATE):
         if DATE > DtRowToDateTime (priceDate.loc[mid]):
             l = mid + 1
 
-    # print ('finish find ', ans)
     assert (ans != -1) #must find price record
-    # print (DATE, priceDate.loc[ans])
     return ans
 
 
 class PriceRecord:
     def changeTimeFromUTCtoMT4 (self):
-        # print (self.M1price)
-        # print (' ==== ')
         tz_chicago = timezone('America/Chicago')
-        # print (self.M1price)
         for index, row in self.M1price.iterrows ():
             now = DtRowToDateTime(self.M1price.loc[index])
             after = now + datetime.timedelta(hours=9)
@@ -81,7 +73,6 @@ class PriceRecord:
             print("{:.5f}".format(row['CLOSE']), end = ', ' )
             print("{:.5f}".format(row['TICKVOL']) )
 
-        # print (self.M1price)
 
     def __init__(self, name):
         self.name = name
@@ -90,18 +81,12 @@ class PriceRecord:
         # file_name = 'data/small_' + name + '_M1.csv'
         # file_name = 'data/new_' + name + '_M1.csv'
         file_name = 'data/mt4_' + name + '_M1.csv'
-        print(file_name)
         self.M1price = pd.read_csv (file_name, sep= ',', names = column)
         self.FullTraceOfEachDate = {}
         self.countUniqueTrace = {}
         self.IndexSetOfEachTrace = {} #record the index in TradeSignal of each trace
         self.TotalSignalNum = 0
         new_file_name = file_name.replace ('small', 'MT4')
-        # print ('  new   ', new_file_name)
-        # self.changeTimeFromUTCtoMT4 ()
-        # print (self.M1price)
-        # self.M1price.to_csv (file_name.replace ('new', 'MT4'))
-        # self.M1price.to_csv (new_file_name, float_format='%.5f')
 
 
     def printM1 (self):
@@ -110,13 +95,11 @@ class PriceRecord:
     def findPriceGivenDate (self, DATE):
         NewDate = ''
         num = 0
-        # print (DATE, 'begin find ..')
 
         dateFormatter = "%Y/%m/%d"
         DATE = datetime.datetime.strptime(DATE, dateFormatter)
 
 
-        # print(self.M1price)
         find = 0
         out = []
 
@@ -160,17 +143,6 @@ class PriceRecord:
         l = -1
         r = -1
         ret = []
-        # for index, row in self.M1price.iterrows():
-        #     if index == 0:
-        #         continue
-        #     if CheckDateBetween (row['DATE'], BeginDate, EndDate):
-        #         if l == -1:
-        #             l = index
-        #             find = 1
-        #     else:
-        #         if find == 1:
-        #             r = index
-        #             break
 
         l = FindPosGivenDateTime (self.M1price, StrToDayTime(BeginDate))
         r = FindPosGivenDateTime (self.M1price, StrToDateTime(BeginDate + ' 23:59:00'))

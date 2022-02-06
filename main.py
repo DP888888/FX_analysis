@@ -10,7 +10,7 @@ import signal
 # exit()
 
 column = ['date', 'week', 'type', 'direction', 'entry', 'cut', 'First', 'Second']
-TradeSignal = pd.read_csv('data/TradeSignal(2).csv', names = column)
+TradeSignal = pd.read_csv('data/TradeSignal(4).csv', names = column)
 TradeSignal = signal.changeDataFormate (TradeSignal)
 TradeSignal['direction'] = TradeSignal['direction'].astype (str)
 for index, each in TradeSignal.iterrows ():
@@ -107,15 +107,13 @@ def work (typeName):
     test.IndexSetOfEachTrace = {} #record the index in TradeSignal of each trace
     Count = 0
     test.TotalSignalNum = 0
-    Empty = 0
     for i in range (1, len (TradeSignal)):
         if TradeSignal.loc[i]['type'] == typeName :
-            Count = Count + 1
             TodayPriceRecord = price.findPriceGivenDate (TradeSignal.loc[i]['date'] )
             if TodayPriceRecord.size == 0:
-                print (i, TradeSignal.loc[i]['date'] )
-                Empty = Empty + 1
+                # print (i, TradeSignal.loc[i]['date'] )
                 continue
+            Count = Count + 1
             SignalArray = signal.SetSignalArray(TradeSignal, i)
 
             trace = FindTraceFromPriceAndSignal (TodayPriceRecord, SignalArray, TradeSignal.loc[i].direction == 'long')
@@ -132,7 +130,7 @@ def work (typeName):
 
 
     print ('Total count: ', Count)
-    print ('empty  ', Empty)
+    # print ('empty  ', Empty)
     test.TotalSignalNum = Count
     signal.AnalysisTrace(test.countUniqueTrace, Count, TradeSignal, test.IndexSetOfEachTrace, test)
 

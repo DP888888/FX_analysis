@@ -9,18 +9,19 @@ def changeDataFormate (TradeSignal):
 
 def DtRowToDateTime(input):
     str = input['DATE'] + ' ' + input['TIME']
+    str = str.replace ('-', '.')
     dateFormatter = "%Y.%m.%d %H:%M:%S"
     t = datetime.datetime.strptime(str, dateFormatter)
     return t
 
 def StrToDateTime(input):
     dateFormatter = "%Y.%m.%d %H:%M:%S"
-    t = datetime.datetime.strptime(str (input), dateFormatter)
+    t = datetime.datetime.strptime(str (input).replace ('-', '.'), dateFormatter)
     return t
 
 def StrToDayTime(str):
     dateFormatter = "%Y.%m.%d"
-    t = datetime.datetime.strptime(str, dateFormatter)
+    t = datetime.datetime.strptime(str.replace ('-', '.'), dateFormatter)
     return t
 
 def CheckDateBetween(date, BeginDate, EncDate):
@@ -122,7 +123,9 @@ class PriceRecord:
         return self.M1price[BeginPos: EndPos]
 
     def SumArrayToOneBar (self, input):
+        # print (input, '   =====', input[0])
         ret = input[0]
+        ret[1] = input[-1][1]
         ret[5] = input[-1][5] #close
         for each in input:
             if float (each[3]) > float (ret[3]): #high
@@ -154,14 +157,18 @@ class PriceRecord:
         r = -1
         ret = []
 
-        l = FindPosGivenDateTime (self.M1price, StrToDayTime(BeginDate))
-        r = FindPosGivenDateTime (self.M1price, StrToDateTime(BeginDate + ' 23:59:00'))
+        # l = FindPosGivenDateTime (self.M1price, StrToDayTime(BeginDate))
+        l = FindPosGivenDateTime (self.M1price, StrToDateTime(BeginDate + ' 00:00:00') - datetime.timedelta(hours=24))
+        r = FindPosGivenDateTime (self.M1price, StrToDateTime(BeginDate + ' 12:00:00'))
+        # print (' ====', l, r)
+        # print (self.M1price.loc[l])
+        # print (self.M1price.loc[r])
 
-        while l - 1 >= 1 and CheckDateBetween(self.M1price.loc[l - 1]['DATE'], BeginDate, EndDate):
-            l = l - 1
-        Max = len (self.M1price)
-        while r + 1 < Max and CheckDateBetween(self.M1price.loc[r + 1]['DATE'], BeginDate, EndDate):
-            r = r + 1
+        # while l - 1 >= 1 and CheckDateBetween(self.M1price.loc[l - 1]['DATE'], BeginDate, EndDate):
+        #     l = l - 1
+        # Max = len (self.M1price)
+        # while r + 1 < Max and CheckDateBetween(self.M1price.loc[r + 1]['DATE'], BeginDate, EndDate):
+        #     r = r + 1
 
         tmp = []
         for i in range (l, r):

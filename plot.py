@@ -12,7 +12,7 @@ import matplotlib.dates as mdates
 
 
 
-def work (typeName):
+def work (typeName, value, End, BarMin):
     price = test.PriceRecord (typeName)
     # price.printM1()
     # # exit()
@@ -23,8 +23,13 @@ def work (typeName):
     # End = '2020.03.25'
     value = '2021.12.16'
     End = '2021.12.17'
-    BarMin = 5
-    df = price.plot_5_GivenDate(value, value, 5)
+    if BarMin == 5:
+        df = price.plot_5_GivenDate(value, value, 5)
+    elif BarMin == 60:
+        df = price.plot_5_GivenDate(value, value, 5)
+    else:
+        sys.exit("Can only plot 5min or 60min!")
+
     if df.empty :
         print ('error, no price data!')
         return
@@ -106,4 +111,21 @@ def work (typeName):
 
 
 # df = work ('EURUSD')
-df = work ('GBPJPY')
+
+Type = input("Please enter type number (1 for EURUSD, 2 for GBPUSD, 3 for GBPJPY)\n")
+Type = int (Type)
+print (' === ', Type)
+if Type == 1:
+    TypeName = 'EURUSD'
+elif Type == 2:
+    TypeName = 'GBPUSD'
+elif Type == 3:
+    TypeName = 'GBPJPY'
+else:
+    sys.exit ("Type number should be 1, 2 or 3.")
+
+Date = input ("Please enter plot date (like 2020.01.03)\n")
+BarMin = input ("enter the minutes of each bar (5 or 60)\n")
+BarMin = int(BarMin)
+
+df = work (TypeName, Date, Date, BarMin)

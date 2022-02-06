@@ -19,9 +19,14 @@ def work (typeName):
     # price.CheckData()
     # exit()
     # value = input("Please enter a string:\n")
-    value = '2020.03.24'
-    End = '2020.03.25'
+    # value = '2020.03.24'
+    # End = '2020.03.25'
+    value = '2021.12.16'
+    End = '2021.12.17'
     df = price.plotGivenDate(value, End, 60)
+    if df.empty :
+        print ('error, no price data!')
+        return
 
     df['DATE'] = df['DATE'] + ' ' + df['TIME']
 
@@ -77,10 +82,10 @@ def work (typeName):
     plt.grid()
     # plt.xticks(rotation=45)
     fig.set_size_inches(1920 / dpi, 1980 / dpi)
-    plt.axhline(1.0805)
-    plt.axvline(5.5)
+    # plt.axhline(1.0805)
+    # plt.axvline(5.5)
     plt.show()
 
 
-df = work ('EURUSD')
-# df = work ('GBPJPY')
+# df = work ('EURUSD')
+df = work ('GBPJPY')

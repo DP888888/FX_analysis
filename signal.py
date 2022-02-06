@@ -166,14 +166,15 @@ def AnalysisTrace (countUniqueTrace, TotCount, TradeSignal, IndexSetOfEachTrace,
     countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[0]))
     for each in countUniqueTrace:
         print(each, countUniqueTrace[each])
-        print ('         ', IndexSetOfEachTrace[tuple (each)])
-    return
+        # print ('         ', IndexSetOfEachTrace[tuple (each)])
 
 
     print (' ====================== ')
     countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[1]))
     for each in reversed(countUniqueTrace):
         print(each, countUniqueTrace[each])
+
+    return
 
     countUniqueTrace = OrderedDict(sorted(countUniqueTrace.items(), key=lambda x: x[0]))
     AnalyseBeginPos (countUniqueTrace, TotCount)

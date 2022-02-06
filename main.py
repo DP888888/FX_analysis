@@ -9,18 +9,7 @@ import signal
 # eur.printM1()
 # exit()
 
-column = ['date', 'week', 'type', 'direction', 'entry', 'cut', 'First', 'Second']
-TradeSignal = pd.read_csv('data/TradeSignal(4).csv', names = column)
-TradeSignal = signal.changeDataFormate (TradeSignal)
-TradeSignal['direction'] = TradeSignal['direction'].astype (str)
-for index, each in TradeSignal.iterrows ():
-    if float (each['entry']) < float (each['cut']):
-        dir = 'short'
-    else:
-        dir = 'long'
-    TradeSignal.at[index, 'direction'] = dir
-# print (TradeSignal)
-# exit ()
+
 
 def Between (strCurPrice, CandleRecord):
     CurPrice = float ( strCurPrice)
@@ -100,7 +89,10 @@ def MakeUnique (trace):
 
 
 def work (typeName):
+    print ('  ^^^^^^ ********** ++++ ======  ', typeName)
     price = test.PriceRecord (typeName)
+    print (price.TradeSignal)
+    exit()
 
     test.FullTraceOfEachDate = {}
     test.countUniqueTrace = {}

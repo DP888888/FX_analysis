@@ -88,6 +88,16 @@ class PriceRecord:
         self.TotalSignalNum = 0
         new_file_name = file_name.replace ('small', 'MT4')
 
+        column = ['date', 'week', 'type', 'direction', 'entry', 'cut', 'First', 'Second']
+        self.TradeSignal = pd.read_csv('data/TradeSignal(4).csv', names=column)
+        self.TradeSignal = changeDataFormate(self.TradeSignal)
+        self.TradeSignal['direction'] = self.TradeSignal['direction'].astype(str)
+        for index, each in self.TradeSignal.iterrows():
+            if float(each['entry']) < float(each['cut']):
+                dir = 'short'
+            else:
+                dir = 'long'
+            self.TradeSignal.at[index, 'direction'] = dir
 
     def printM1 (self):
         print (self.M1price)
@@ -138,7 +148,7 @@ class PriceRecord:
                 count = count + 1
         print(last, count - 1440)
 
-    def plotGivenDate (self, BeginDate, EndDate, MinutePerBar = 1):
+    def plot_60_GivenDate (self, BeginDate, EndDate, MinutePerBar = 1):
         find = 0
         l = -1
         r = -1
@@ -152,6 +162,23 @@ class PriceRecord:
         Max = len (self.M1price)
         while r + 1 < Max and CheckDateBetween(self.M1price.loc[r + 1]['DATE'], BeginDate, EndDate):
             r = r + 1
+
+        tmp = []
+        for i in range (l, r):
+            if len (tmp) == MinutePerBar or i == r - 1:
+                ret.append (self.SumArrayToOneBar (tmp))
+                tmp.clear()
+            tmp.append (self.M1price.loc[i])
+        return pd.DataFrame (ret)
+
+    def plot_5_GivenDate (self, BeginDate, EndDate, MinutePerBar = 1):
+        find = 0
+        l = -1
+        r = -1
+        ret = []
+
+        l = FindPosGivenDateTime (self.M1price, StrToDateTime(BeginDate + ' 06:00:00'))
+        r = FindPosGivenDateTime (self.M1price, StrToDateTime(BeginDate + ' 11:30:00'))
 
         tmp = []
         for i in range (l, r):

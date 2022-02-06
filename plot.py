@@ -23,7 +23,8 @@ def work (typeName):
     # End = '2020.03.25'
     value = '2021.12.16'
     End = '2021.12.17'
-    df = price.plotGivenDate(value, End, 60)
+    BarMin = 5
+    df = price.plot_5_GivenDate(value, value, 5)
     if df.empty :
         print ('error, no price data!')
         return
@@ -57,8 +58,8 @@ def work (typeName):
         r = t.rfind (':')
         t = t[l + 1:r]
         pp = t.find ('T')
-        t = t[:pp] + ' ' + t[pp + 1: ]
-        # print (t)
+        # t = t[:pp] + ' ' + t[pp + 1: ]  #print day & time
+        t = t[pp + 1: ]  #only print time
         return t
 
 
@@ -67,7 +68,7 @@ def work (typeName):
     # ax.xaxis.set_major_locator(ticker.MultipleLocator(10))
     ax.xaxis.set_major_formatter(ticker.FuncFormatter(format_date))
 
-    candlestick_ohlc(ax, weekday_quotes, width=0.015 * 30, colorup='green', colordown='red', alpha=0.8)
+    candlestick_ohlc(ax, weekday_quotes, width=0.015 * 30 * 1.5, colorup='red', colordown='green', alpha=0.8)
 
 
     # ax.xaxis_date()
@@ -81,10 +82,27 @@ def work (typeName):
 
     plt.grid()
     # plt.xticks(rotation=45)
-    fig.set_size_inches(1920 / dpi, 1980 / dpi)
-    # plt.axhline(1.0805)
-    # plt.axvline(5.5)
-    plt.show()
+    # fig.set_size_inches(1920 / dpi, 1980 / dpi)
+
+    if BarMin == 5:
+        # plt.axhline(1.0805)
+        plt.axvline(12)
+        plt.axvline(60)
+        for i in range (1, len (price.TradeSignal)):
+            # print(' ===   ', price.TradeSignal.loc[i])
+            if price.TradeSignal.loc[i]['type'] == typeName and  price.TradeSignal.loc[i]['date'] == value.replace ('.', '/'):
+                # print ( price.TradeSignal.loc[i])
+                entry = price.TradeSignal.loc[i]['entry']
+                cut = price.TradeSignal.loc[i]['cut']
+                First = price.TradeSignal.loc[i]['First']
+                Second = price.TradeSignal.loc[i]['Second']
+                plt.axhline(entry, color = 'y')
+                plt.axhline(cut)
+                plt.axhline(First)
+                plt.axhline(Second, color = 'b')
+            # if price.TradeSignal.loc[i]['type'] == typeName and price.TradeSignal.loc[i]['DATE'] == value:
+
+        plt.show()
 
 
 # df = work ('EURUSD')
